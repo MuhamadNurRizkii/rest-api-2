@@ -1,0 +1,17 @@
+{
+  "name": "rest-api-2",
+  "version": "1.0.0",
+  "description": "Latihan membuat REST API #2",
+  "main": "app.js",
+  "scripts": {
+    "start": "npx nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rizki",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.0"
+  }
+}
