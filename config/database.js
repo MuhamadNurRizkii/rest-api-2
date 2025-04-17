@@ -12,8 +12,8 @@ async function connectDB() {
   try {
     await client.connect();
     db = client.db(dbName);
-    return db.collection("products");
     console.log("Connected to mongoDB");
+    return db.collection("products");
   } catch (error) {
     console.log("Error: ", error);
   }
