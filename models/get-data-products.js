@@ -1,21 +1,14 @@
-const db = require("../config/database");
+const { connectDB } = require("../config/database");
+const { ObjectId } = require("mongodb");
 
 // ambil semua data products
-const getDataProducts = (req, res) => {
-  const sql = "SELECT * FROM products";
+const getDataProducts = async (req, res) => {
+  const collection = await connectDB();
+  const products = await collection.find().toArray();
 
-  db.query(sql, (err, result) => {
-    if (err) {
-      return res.status(500).json({
-        message: `Error: ${err}`,
-        data: null,
-      });
-    }
-
-    res.json({
-      message: "Data berhasil diambil",
-      data: result,
-    });
+  res.json({
+    message: "Data berhasil diambil",
+    data: products,
   });
 };
 

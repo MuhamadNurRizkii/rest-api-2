@@ -1,10 +1,22 @@
-const mysql = require("mysql2");
+const { MongoClient, ObjectId } = require("mongodb");
 
-const db = mysql.createConnection({
-  host: process.env.HOST,
-  user: process.env.USERNAME,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE,
-});
+const uri = process.env.MONGO_URI;
+const dbName = "express_mysql";
 
-module.exports = db;
+// connect to database
+const client = new MongoClient(uri);
+
+let db;
+
+async function connectDB() {
+  try {
+    await client.connect();
+    db = client.db(dbName);
+    return db.collection("products");
+    console.log("Connected to mongoDB");
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+}
+
+module.exports = { connectDB };

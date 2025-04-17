@@ -1,26 +1,31 @@
-const db = require("../config/database");
+const { connectDB } = require("../config/database");
+const { ObjectId } = require("mongodb");
 
-const createDataProducts = (req, res) => {
+const createDataProducts = async (req, res) => {
+  const collection = await connectDB();
   const { nama_product, harga, stok, kategori } = req.body;
-  const sql = `INSERT INTO products (nama_product, harga, stok, kategori) VALUES
-                ('${nama_product}', ${harga}, ${stok}, '${kategori}')`;
 
-  db.query(sql, (err, result) => {
-    try {
-      res.status(201).json({
-        message: "Data baru berhasil ditambahkan",
-        data: {
-          nama_product,
-          harga,
-          stok,
-          kategori,
-        },
-      });
-    } catch (err) {
-      return res.status(500).json({
-        message: `Error: ${err}`,
-      });
-    }
+  if (!nama_product || !harga || !stok || !kategori) {
+    return res.status(400).json({
+      message: "Semua field harus diisi!!",
+    });
+  }
+
+  await collection.insertOne({
+    nama_product,
+    harga,
+    stok,
+    kategori,
+  });
+
+  res.status(201).json({
+    message: "Data product berhasil ditambahkan!",
+    data: {
+      nama_product,
+      harga,
+      stok,
+      kategori,
+    },
   });
 };
 

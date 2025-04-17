@@ -1,19 +1,22 @@
-const db = require("../config/database");
+const { connectDB } = require("../config/database");
+const { ObjectId } = require("mongodb");
 
-const deleteDataProduct = (req, res) => {
-  const id = parseInt(req.params.id);
-  const sql = `DELETE FROM products WHERE id= ${id}`;
+const deleteDataProduct = async (req, res) => {
+  const collection = await connectDB();
+  const id = req.params.id;
 
-  db.query(sql, (err, result) => {
-    if (err) {
-      return res.status(500).json({
-        message: `Error: ${er}`,
-      });
-    }
-
-    res.json({
-      message: "Data berhasil dihapus!!",
+  if (!id) {
+    return res.status(404).json({
+      message: "Data not found",
     });
+  }
+
+  await collection.deleteOne({
+    _id: new ObjectId(id),
+  });
+
+  res.json({
+    message: "Data berhasil dihapus!",
   });
 };
 
